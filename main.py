@@ -1,6 +1,6 @@
 ## using streamlit to display WASABC data
 import streamlit as st
-import pandas as pd
+import pandas as pd, numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -64,7 +64,7 @@ with col2:
 years=df['Year'].sort_values().unique()
 
 # years=years.
-col1, col2 = st.columns([1,3])
+col1, col2, col3 = st.columns([1,3,2])
 with col1:
     all_years = st.button('Select all years?')
     clear_years = st.button('Clear years')
@@ -99,6 +99,8 @@ with col1:
         plt.title('Entries per category')
         plt.xticks(rotation=90)
         st.pyplot(fig)
+
+
     else:
         fig=plt.figure(figsize=(10,4))
         df_count_by_cat = df[['Category','Category name', 'Entry Number']][df['Year']==year].groupby(['Category', 'Category name'], as_index=False).count()
@@ -108,6 +110,8 @@ with col1:
         plt.title('Entries per category')
         plt.xticks(rotation=90)
         st.pyplot(fig)
+
+
 
 with col2:
     # scores by style
@@ -129,3 +133,29 @@ with col2:
         plt.title(plot_title)
         plt.xticks(rotation=90)
         st.pyplot(fig)
+
+c1, c2, c3, c4, c5, c6 =st.columns(6)
+with c2:
+    if all_years:
+        st.metric("Number of entries", len(df))
+    else:
+        metric_title = "Number of entries in " + str(year)
+        st.metric(metric_title, len(df[df['Year']==year]))
+
+with c4:
+    if all_years:
+        st.metric("Average score", int(np.mean(df['Score'])))
+    else:
+        st.metric("Average score", int(np.mean(df['Score'][df['Year']==year])))
+
+with c5:
+    if all_years:
+        st.metric("Minimum score", int(np.min(df['Score'])))
+    else:
+        st.metric("Minimum score", int(np.min(df['Score'][df['Year']==year])))
+
+with c6:
+    if all_years:
+        st.metric("Maximum score", int(np.max(df['Score'])))
+    else:
+        st.metric("Maximum score", int(np.max(df['Score'][df['Year']==year])))
