@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import time
 
 # streamlit config
 st.set_page_config(
